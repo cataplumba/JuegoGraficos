@@ -45,6 +45,22 @@ public class Character extends ObjetoJuego {
 		this.inventario = inventario;
 	}
 	
+	public void incrementarAtaque(int ataque) {
+		this.ataque+=ataque;
+	}
+	
+	public void decrementarAtaque(int ataque) {
+		this.ataque-=ataque;
+	}
+	
+	public void incrementarDefensa(int defensa) {
+		this.defensa+=defensa;
+	}
+	
+	public void decrementarDefensa(int defensa) {
+		this.defensa-=defensa;
+	}
+	
 	public void incrementarVida(ObjetoJuego pocion) {
 		if(this.salud<100) {
 			this.salud+=pocion.getSalud();

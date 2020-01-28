@@ -31,7 +31,7 @@ public class Boton extends Sprite {
 			switch(accion) {
 			case 1:{
 
-				if(pantallaJuego.personaje.getInventario().size()>=2) {
+				if(pantallaJuego.personaje.getInventario().size()>=3) {
 					//Si el personaje tiene más de 3 objetos, se elimina el primero que recogió
 					pantallaJuego.personaje.getInventario().add(pantallaJuego.objetosJuego.get(0));
 					pantallaJuego.personaje.getInventario().remove(0);

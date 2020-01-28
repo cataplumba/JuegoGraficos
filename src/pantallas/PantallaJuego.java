@@ -162,15 +162,76 @@ public class PantallaJuego implements Pantalla {
 		// INVENTARIO
 		g.drawString("Inventario:", 10, 125);
 		for (int i = 0; i < personaje.getInventario().size(); i++) {
-			if ((!personaje.getInventario().isEmpty() && (personaje.getInventario().size() <= 0))) {
-				ObjetoJuego objetoAux;
-				objetoAux = personaje.getInventario().get(i - 1);
-				personaje.getInventario().get(i).setPosX(objetoAux.getPosX() + objetoAux.getAncho());
-
-			} else {
+			switch (i) {
+			case 0: {
 				personaje.getInventario().get(i).setPosX(15);
-				personaje.getInventario().get(i).setPosY(125);
+				personaje.getInventario().get(i).setPosY(140);
+
+				// Se dibuja el atribujo del objeto debajo del mismo
+				switch (personaje.getInventario().get(i).getTipo()) {
+				case "espada": {
+					g.setColor(Color.red);
+					g.drawString("+"+Integer.toString(personaje.getInventario().get(i).getAtaque()), 15, 230);
+					break;
+				}
+
+				case "escudo": {
+					g.setColor(Color.green);
+					g.drawString("+"+Integer.toString(personaje.getInventario().get(i).getDefensa()), 15, 230);
+					break;
+				}
+				}
+				break;
 			}
+
+			case 1: {
+				personaje.getInventario().get(i).setPosX(45);
+				personaje.getInventario().get(i).setPosY(140);
+				
+				switch (personaje.getInventario().get(i).getTipo()) {
+				case "espada": {
+					g.setColor(Color.red);
+					g.drawString("+"+Integer.toString(personaje.getInventario().get(i).getAtaque()), 50, 230);
+					break;
+				}
+
+				case "escudo": {
+					g.setColor(Color.green);
+					g.drawString("+"+Integer.toString(personaje.getInventario().get(i).getDefensa()), 50, 230);
+					break;
+				}
+				}
+				break;
+			}
+
+			case 2: {
+				personaje.getInventario().get(i).setPosX(75);
+				personaje.getInventario().get(i).setPosY(140);
+				
+				switch (personaje.getInventario().get(i).getTipo()) {
+				case "espada": {
+					g.setColor(Color.red);
+					g.drawString("+"+Integer.toString(personaje.getInventario().get(i).getAtaque()), 85, 230);
+					break;
+				}
+
+				case "escudo": {
+					g.setColor(Color.green);
+					g.drawString("+"+Integer.toString(personaje.getInventario().get(i).getDefensa()), 85, 230);
+					break;
+				}
+				}
+				break;
+			}
+			}
+//			if ((personaje.getInventario().size()<2)) {
+//				personaje.getInventario().get(i).setPosX(15);
+//				personaje.getInventario().get(i).setPosY(125);
+//			} else {
+//				personaje.getInventario().get(i).setPosY(125);
+//				personaje.getInventario().get(i).setPosX(500);
+//				
+//			}
 			personaje.getInventario().get(i).pintarEnMundo(g);
 		}
 
@@ -302,6 +363,9 @@ public class PantallaJuego implements Pantalla {
 
 	}
 
+	/**
+	 * Detiene el juego, dando a todos los objetos velocidad 0
+	 */
 	public void detenerJuego() {
 
 		// Detiene el movimiento del suelo
@@ -326,6 +390,9 @@ public class PantallaJuego implements Pantalla {
 		juegoEnMarcha = false;
 	}
 
+	/**
+	 * Reanuda el juego, dándole velocidad a los objetos
+	 */
 	public void reanudarJuego() {
 
 		// Detiene el movimiento del suelo
