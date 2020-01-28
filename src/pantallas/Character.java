@@ -15,6 +15,7 @@ public class Character extends ObjetoJuego {
 		this.nivel = nivel;
 		this.ataque = ataque;
 		this.defensa = defensa;
+		
 		this.salud = salud;
 		this.siguienteNivel = 100;
 		this.experiencia = 0;
@@ -35,6 +36,14 @@ public class Character extends ObjetoJuego {
 
 	public void setInventario(ArrayList<ObjetoJuego> inventario) {
 		this.inventario = inventario;
+	}
+	
+	public void incrementarVida(ObjetoJuego pocion) {
+		if(this.salud<100) {
+			this.salud+=pocion.getSalud();
+		}else {
+			this.salud=100;
+		}
 	}
 	
 

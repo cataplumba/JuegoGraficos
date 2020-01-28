@@ -7,6 +7,7 @@ import java.util.Queue;
 import principal.Sprite;
 
 public class ObjetoJuego extends Sprite {
+	protected String tipo;
 	protected int nivel;
 	protected int ataque;
 	protected int defensa;
@@ -25,6 +26,15 @@ public class ObjetoJuego extends Sprite {
 		this.ataque = ataque;
 		this.defensa = defensa;
 		this.salud = salud;
+	}
+	
+	public ObjetoJuego(int posX, int posY, int ancho, int alto, int velX, int velY,
+			int ataque, int defensa, int salud,String tipo, String ruta) {
+		super(posX, posY, ancho, alto, velX, velY, ruta);
+		this.ataque = ataque;
+		this.defensa = defensa;
+		this.salud = salud;
+		this.tipo = tipo;
 	}
 
 	public int getAtaque() {
@@ -57,6 +67,14 @@ public class ObjetoJuego extends Sprite {
 
 	public void setNivel(int nivel) {
 		this.nivel = nivel;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 
 	@Override

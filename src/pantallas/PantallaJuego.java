@@ -49,7 +49,8 @@ public class PantallaJuego implements Pantalla {
 	Vector<Sprite> parallaxSuelo;
 	Vector<Sprite> parallaxBosque;
 	Vector<Sprite> parallaxCielo;
-	Vector<Sprite>objetosJuego;
+	Vector<ObjetoJuego> objetosJuego;
+	Vector<Boton> listaBotones;
 
 	PanelJuego panelJuego;
 
@@ -67,12 +68,10 @@ public class PantallaJuego implements Pantalla {
 		parallaxBosque = new Vector<Sprite>();
 		parallaxCielo = new Vector<Sprite>();
 		generadorEventos = new Vector<Sprite>();
-		objetosJuego = new Vector<Sprite>();
-		
-		aleatorizadorEventos = rd.nextInt(10)+1;
-		
-				
-		
+		objetosJuego = new Vector<ObjetoJuego>();
+		listaBotones = new Vector<Boton>();
+
+		aleatorizadorEventos = rd.nextInt(10) + 1;
 
 		try {
 			// canvasFondo = ImageIO.read(new File("Imagenes/capaSuelo.png"));
@@ -81,11 +80,8 @@ public class PantallaJuego implements Pantalla {
 			e.printStackTrace();
 		}
 
-//		imagenFondo = canvasFondo;
-//		imagenPersonaje = canvasPersonaje;
-
-		personaje = new Character(40, panelJuego.getHeight() - 200, 80, 80, 0, 0, 1, rd.nextInt(15), rd.nextInt(15),
-				100, "Imagenes/personaje.png");
+		personaje = new Character(40, panelJuego.getHeight() - 200, 80, 80, 0, 0, 1, rd.nextInt(15), rd.nextInt(15), 20,
+				"Imagenes/personaje.png");
 
 		parallaxSuelo
 				.add(new Sprite(0, 0, panelJuego.getWidth(), panelJuego.getHeight(), -7, 0, "Imagenes/capaSuelo.png"));
@@ -105,36 +101,38 @@ public class PantallaJuego implements Pantalla {
 		parallaxCielo.add(new Sprite(panelJuego.getWidth(), 0, panelJuego.getWidth(), panelJuego.getHeight(), -1, 0,
 				"Imagenes/capaCielo.png"));
 
+		generarObjeto();
+
 	}
 
 	@Override
 	public void pintarPantalla(Graphics g) {
-		
+
 		rellenarFondo(g);
 
-		//CIELO
+		// CIELO
 		for (int i = 0; i < parallaxCielo.size(); i++) {
 			parallaxCielo.get(i).pintarEnMundo(g);
 		}
 
-		//BOSQUE
+		// BOSQUE
 		for (int i = 0; i < parallaxBosque.size(); i++) {
 			parallaxBosque.get(i).pintarEnMundo(g);
 		}
 
-		//SUELO
+		// SUELO
 		for (int i = 0; i < parallaxSuelo.size(); i++) {
 			parallaxSuelo.get(i).pintarEnMundo(g);
 		}
 
-		//PERSONAJE
+		// PERSONAJE
 		personaje.pintarEnMundo(g);
-		
-		//OBJETOS JUEGO
+
+		// OBJETOS JUEGO
 		for (int i = 0; i < objetosJuego.size(); i++) {
 			objetosJuego.get(i).pintarEnMundo(g);
 		}
-		
+
 		g.setFont(fuenteInicio);
 
 		// NIVEL
@@ -153,22 +151,19 @@ public class PantallaJuego implements Pantalla {
 		// TIEMPO
 		g.setFont(fuenteInicio);
 		g.setColor(Color.ORANGE);
-		
-		if(juegoEnMarcha) {
+
+		if (juegoEnMarcha) {
 			tiempoTranscurrido = System.nanoTime() - tiempoInicial;
 		}
-		
-		 g.drawString(formato.format((tiempoTranscurrido) / 1e9), panelJuego.getWidth()-150,
-		 50);
+
+		g.drawString(formato.format((tiempoTranscurrido) / 1e9), panelJuego.getWidth() - 150, 50);
 
 		// INVENTARIO
 		for (int i = 0; i < personaje.getInventario().size(); i++) {
 			personaje.getInventario().get(i).pintarEnMundo(g);
 		}
-		
-		g.drawString(Integer.toString(aleatorizadorEventos), panelJuego.getWidth()-150, 150);
-		
-		
+
+		g.drawString(Integer.toString(aleatorizadorEventos), panelJuego.getWidth() - 150, 150);
 
 	}
 
@@ -190,8 +185,8 @@ public class PantallaJuego implements Pantalla {
 
 			if ((parallaxBosque.get(0).getPosX() + parallaxBosque.get(0).getAncho()) <= 0) {
 				parallaxBosque.remove(0);
-				parallaxBosque.add(new Sprite(panelJuego.getWidth()-5, 0, panelJuego.getWidth(), panelJuego.getHeight(),
-						-3, 0, "Imagenes/capaBosque.png"));
+				parallaxBosque.add(new Sprite(panelJuego.getWidth() - 5, 0, panelJuego.getWidth(),
+						panelJuego.getHeight(), -3, 0, "Imagenes/capaBosque.png"));
 			}
 
 			if ((parallaxCielo.get(0).getPosX() + parallaxCielo.get(0).getAncho()) <= 0) {
@@ -199,24 +194,84 @@ public class PantallaJuego implements Pantalla {
 				parallaxCielo.add(new Sprite(panelJuego.getWidth(), 0, panelJuego.getWidth(), panelJuego.getHeight(),
 						-1, 0, "Imagenes/capaCielo.png"));
 			}
-			
+
 			int tiempoAux = (int) (tiempoTranscurrido / 1e9);
 			System.out.println(tiempoAux);
-			if(aleatorizadorEventos==tiempoAux) {
-				aleatorizadorEventos = rd.nextInt(10);
-				tiempoInicial = System.nanoTime();
-				tiempoTranscurrido = System.nanoTime()-tiempoInicial;
-				objetosJuego.add(new Character(panelJuego.getWidth()+150, panelJuego.getHeight() - 150, 30, 40, -7, 0, 1, rd.nextInt(15), rd.nextInt(15),
-						100, "Imagenes/pocion.png"));
-				
-				System.out.println("Hola");
-			}
-			
+//			if (aleatorizadorEventos == tiempoAux) {
+//				aleatorizadorEventos = rd.nextInt(10);
+//				tiempoInicial = System.nanoTime();
+//				tiempoTranscurrido = System.nanoTime() - tiempoInicial;
+//				
+//
+//				objetosJuego.add(new ObjetoJuego(panelJuego.getWidth() + 150, panelJuego.getHeight() - 150, 40, 50, -7,
+//					0, 0, 0, rd.nextInt(25), "pocion", "Imagenes/pocion.png"));
+//
+//				System.out.println("Hola");
+//			}
 
 			moverSprites();
 			comprobarColisiones();
 		}
 
+	}
+
+	/**
+	 * Genera un objeto en el mundo
+	 */
+	public void generarObjeto() {
+		Runnable hilo = new Runnable() {
+
+			@Override
+			public void run() {
+
+				Random rd = new Random();
+				int num;
+
+				while (true) {
+					if (juegoEnMarcha) {
+						num = rd.nextInt(4);
+
+						switch (num) {
+						case 0: {
+							objetosJuego.add(new ObjetoJuego(panelJuego.getWidth() + 150, panelJuego.getHeight() - 175,
+									40, 50, -7, 0, 0, 0, rd.nextInt(25), "pocion", "Imagenes/pocion.png"));
+							break;
+						}
+
+						case 1: {
+							objetosJuego.add(new ObjetoJuego(panelJuego.getWidth() + 150, panelJuego.getHeight() - 175,
+									70, 70, -7, 0, 0, 0, rd.nextInt(25), "espada", "Imagenes/espada.png"));
+							break;
+						}
+
+						case 2: {
+							objetosJuego.add(new ObjetoJuego(panelJuego.getWidth() + 150, panelJuego.getHeight() - 175,
+									70, 70, -7, 0, 0, 0, rd.nextInt(25), "escudo", "Imagenes/escudo.png"));
+							break;
+						}
+
+						case 3: {
+							int tamanioEnemigo = rd.nextInt(80) + 20;
+							objetosJuego.add(new ObjetoJuego(panelJuego.getWidth() + 150, panelJuego.getHeight() - 175,
+									tamanioEnemigo, tamanioEnemigo, -7, 0, 0, 0, rd.nextInt(25), "enemigo",
+									"Imagenes/enemigo.png"));
+							break;
+						}
+						}
+
+						try {
+							Thread.sleep(rd.nextInt(4000));
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+
+			}
+		};
+
+		Thread hiloGenerador = new Thread(hilo);
+		hiloGenerador.start();
 	}
 
 	public void detenerJuego() {
@@ -297,7 +352,7 @@ public class PantallaJuego implements Pantalla {
 		for (int i = 0; i < parallaxCielo.size(); i++) {
 			parallaxCielo.get(i).actualizarPosicionFondo(panelJuego);
 		}
-		
+
 		for (int i = 0; i < objetosJuego.size(); i++) {
 			objetosJuego.get(i).actualizarPosicionFondo(panelJuego);
 		}
@@ -305,6 +360,28 @@ public class PantallaJuego implements Pantalla {
 	}
 
 	private void comprobarColisiones() {
+		for (int i = 0; i < objetosJuego.size(); i++) {
+			if (personaje.colisiona(objetosJuego.get(i))) {
+				switch (objetosJuego.get(i).getTipo()) {
 
+				case "pocion": {
+					personaje.incrementarVida(objetosJuego.get(i));
+					objetosJuego.remove(i);
+				}
+
+				case "espada": {
+
+				}
+
+				case "escudo": {
+
+				}
+
+				case "enemigo": {
+
+				}
+				}
+			}
+		}
 	}
 }
