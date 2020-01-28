@@ -30,7 +30,7 @@ public class Sprite {
 	 * Constructor privado para evitar repetición de código en los otros
 	 * constructores.
 	 */
-	private Sprite(int posX, int posY, int ancho, int alto, int velX, int velY) {
+	protected Sprite(int posX, int posY, int ancho, int alto, int velX, int velY) {
 		this.posX = posX;
 		this.posY = posY;
 		this.ancho = ancho;

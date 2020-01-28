@@ -1,59 +1,74 @@
 package pantallas;
 
 import java.awt.Color;
-import java.awt.event.MouseAdapter;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Vector;
 
-import principal.PanelJuego;
 import principal.Sprite;
 
-public class Boton extends Sprite implements MouseListener {
+public class Boton extends Sprite {
 	private int accion;
-	private PanelJuego panelJuego;
-	private Vector<ObjetoJuego>inventarioPersonaje;
-	private ObjetoJuego objeto;
+	private PantallaJuego pantallaJuego;
+	private MouseListener listener;
 
-	public Boton(int posX, int posY, int ancho, int alto, int velX, int velY, Color color, int accion) {
+	public Boton(int posX, int posY, int ancho, int alto, int velX, int velY, Color color, int accion,PantallaJuego pantallaJuego,Vector<ObjetoJuego> listaObjeto) {
 		super(posX, posY, ancho, alto, velX, velY, color);
 		this.accion = accion;
-	}
+		this.pantallaJuego = pantallaJuego;
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
+	
+	public void comprobarClick(MouseEvent e) {
+		Point p = e.getPoint();
 		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
+		boolean clickX = (e.getX()>=posX)&&(e.getX()<=posX+ancho);
+		boolean clickY = (e.getY()>=posY)&&(e.getY()<=posY+alto);
 		
-	}
+		if(clickX&&clickY) {
+			switch(accion) {
+			case 1:{
 
-	@Override
-	public void mousePressed(MouseEvent e) {
-		if(accion==1) {
-			inventarioPersonaje.remove(0);
-			inventarioPersonaje.add(objeto);
+				if(pantallaJuego.personaje.getInventario().size()>=2) {
+					//Si el personaje tiene más de 3 objetos, se elimina el primero que recogió
+					pantallaJuego.personaje.getInventario().add(pantallaJuego.objetosJuego.get(0));
+					pantallaJuego.personaje.getInventario().remove(0);
+					pantallaJuego.objetosJuego.remove(0);
+				}else {
+					pantallaJuego.personaje.getInventario().add(pantallaJuego.objetosJuego.get(0));
+					pantallaJuego.objetosJuego.remove(0);
+				}
+				
+				pantallaJuego.reanudarJuego();
+				pantallaJuego.vaciarMensaje();
+				
+				while(!pantallaJuego.listaBotones.isEmpty()) {
+					pantallaJuego.listaBotones.remove(0);
+				}
+				pantallaJuego.desactivarEvento();
+				break;
+			}
+			
+			case 0:{
+
+				if(!pantallaJuego.objetosJuego.isEmpty()) {
+					pantallaJuego.objetosJuego.remove(0);
+				}
+				
+				pantallaJuego.vaciarMensaje();
+				pantallaJuego.reanudarJuego();
+				
+				while(!pantallaJuego.listaBotones.isEmpty()) {
+					pantallaJuego.listaBotones.remove(0);
+				}
+				pantallaJuego.desactivarEvento();
+				break;
+			}
+			}
 		}
-		
 	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
 	
 	
 }

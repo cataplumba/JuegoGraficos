@@ -3,11 +3,12 @@ package pantallas;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Vector;
 
 public class Character extends ObjetoJuego {
 	private int experiencia;
 	private int siguienteNivel;
-	private ArrayList<ObjetoJuego>inventario;
+	private Vector<ObjetoJuego>inventario;
 
 	public Character(int posX, int posY, int ancho, int alto, int velX, int velY, int nivel, int ataque, int defensa,
 			int salud, String ruta) {
@@ -19,7 +20,13 @@ public class Character extends ObjetoJuego {
 		this.salud = salud;
 		this.siguienteNivel = 100;
 		this.experiencia = 0;
-		inventario = new ArrayList<ObjetoJuego>();
+		inventario = new Vector<ObjetoJuego>();
+	}
+	
+	public void combatir(ObjetoJuego enemigo) {
+		while(salud>0||enemigo.getSalud()>0) {
+			
+		}
 	}
 
 	public int getExperiencia() {
@@ -30,11 +37,11 @@ public class Character extends ObjetoJuego {
 		this.experiencia = experiencia;
 	}
 
-	public ArrayList<ObjetoJuego> getInventario() {
+	public Vector<ObjetoJuego> getInventario() {
 		return inventario;
 	}
 
-	public void setInventario(ArrayList<ObjetoJuego> inventario) {
+	public void setInventario(Vector<ObjetoJuego> inventario) {
 		this.inventario = inventario;
 	}
 	

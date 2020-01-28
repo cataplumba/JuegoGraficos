@@ -51,6 +51,9 @@ public class PantallaJuego implements Pantalla {
 	Vector<Sprite> parallaxCielo;
 	Vector<ObjetoJuego> objetosJuego;
 	Vector<Boton> listaBotones;
+	Vector<Sprite> mensajes;
+	private String mensaje;
+	private boolean eventoActivo;
 
 	PanelJuego panelJuego;
 
@@ -70,8 +73,9 @@ public class PantallaJuego implements Pantalla {
 		generadorEventos = new Vector<Sprite>();
 		objetosJuego = new Vector<ObjetoJuego>();
 		listaBotones = new Vector<Boton>();
+		eventoActivo = false;
 
-		aleatorizadorEventos = rd.nextInt(10) + 1;
+		// aleatorizadorEventos = rd.nextInt(10) + 1;
 
 		try {
 			// canvasFondo = ImageIO.read(new File("Imagenes/capaSuelo.png"));
@@ -133,6 +137,11 @@ public class PantallaJuego implements Pantalla {
 			objetosJuego.get(i).pintarEnMundo(g);
 		}
 
+		// BOTONEs
+		for (int i = 0; i < listaBotones.size(); i++) {
+			listaBotones.get(i).pintarEnMundo(g);
+		}
+
 		g.setFont(fuenteInicio);
 
 		// NIVEL
@@ -149,21 +158,42 @@ public class PantallaJuego implements Pantalla {
 		g.drawString("Salud: " + Integer.toString(personaje.getSalud()), 10, 100);
 
 		// TIEMPO
-		g.setFont(fuenteInicio);
-		g.setColor(Color.ORANGE);
-
-		if (juegoEnMarcha) {
-			tiempoTranscurrido = System.nanoTime() - tiempoInicial;
-		}
-
-		g.drawString(formato.format((tiempoTranscurrido) / 1e9), panelJuego.getWidth() - 150, 50);
 
 		// INVENTARIO
+		g.drawString("Inventario:", 10, 125);
 		for (int i = 0; i < personaje.getInventario().size(); i++) {
+			if ((!personaje.getInventario().isEmpty() && (personaje.getInventario().size() <= 0))) {
+				ObjetoJuego objetoAux;
+				objetoAux = personaje.getInventario().get(i - 1);
+				personaje.getInventario().get(i).setPosX(objetoAux.getPosX() + objetoAux.getAncho());
+
+			} else {
+				personaje.getInventario().get(i).setPosX(15);
+				personaje.getInventario().get(i).setPosY(125);
+			}
 			personaje.getInventario().get(i).pintarEnMundo(g);
 		}
 
-		g.drawString(Integer.toString(aleatorizadorEventos), panelJuego.getWidth() - 150, 150);
+		// MENSAJE
+		g.setColor(Color.white);
+		if (mensaje != null) {
+			g.drawString(mensaje, personaje.getPosX() - 20, personaje.getPosY() + 125);
+		}
+
+		if (eventoActivo) {
+			g.drawString("Evento Activo", panelJuego.getWidth() - 200, 20);
+		} else {
+			g.drawString("Evento No Activo", panelJuego.getWidth() - 250, 20);
+		}
+
+		if (juegoEnMarcha) {
+			g.drawString("Juego en Marcha", panelJuego.getWidth() - 250, 50);
+		} else {
+			g.drawString("Juego pausado", panelJuego.getWidth() - 200, 50);
+		}
+
+		// g.drawString(Integer.toString(aleatorizadorEventos), panelJuego.getWidth() -
+		// 150, 150);
 
 	}
 
@@ -195,19 +225,7 @@ public class PantallaJuego implements Pantalla {
 						-1, 0, "Imagenes/capaCielo.png"));
 			}
 
-			int tiempoAux = (int) (tiempoTranscurrido / 1e9);
-			System.out.println(tiempoAux);
-//			if (aleatorizadorEventos == tiempoAux) {
-//				aleatorizadorEventos = rd.nextInt(10);
-//				tiempoInicial = System.nanoTime();
-//				tiempoTranscurrido = System.nanoTime() - tiempoInicial;
-//				
-//
-//				objetosJuego.add(new ObjetoJuego(panelJuego.getWidth() + 150, panelJuego.getHeight() - 150, 40, 50, -7,
-//					0, 0, 0, rd.nextInt(25), "pocion", "Imagenes/pocion.png"));
-//
-//				System.out.println("Hola");
-//			}
+			// generarObjeto();
 
 			moverSprites();
 			comprobarColisiones();
@@ -228,50 +246,60 @@ public class PantallaJuego implements Pantalla {
 				int num;
 
 				while (true) {
-					if (juegoEnMarcha) {
-						num = rd.nextInt(4);
+					num = rd.nextInt(4);
 
-						switch (num) {
-						case 0: {
+					switch (num) {
+					case 0: {
+						if (juegoEnMarcha) {
 							objetosJuego.add(new ObjetoJuego(panelJuego.getWidth() + 150, panelJuego.getHeight() - 175,
 									40, 50, -7, 0, 0, 0, rd.nextInt(25), "pocion", "Imagenes/pocion.png"));
-							break;
 						}
+						break;
+					}
 
-						case 1: {
+					case 1: {
+						if (juegoEnMarcha) {
 							objetosJuego.add(new ObjetoJuego(panelJuego.getWidth() + 150, panelJuego.getHeight() - 175,
-									70, 70, -7, 0, 0, 0, rd.nextInt(25), "espada", "Imagenes/espada.png"));
-							break;
+									70, 70, -7, 0, personaje.getNivel() * (rd.nextInt(10) + 1), 0, 0, "espada",
+									"Imagenes/espada.png"));
 						}
 
-						case 2: {
+						break;
+					}
+
+					case 2: {
+						if (juegoEnMarcha) {
 							objetosJuego.add(new ObjetoJuego(panelJuego.getWidth() + 150, panelJuego.getHeight() - 175,
-									70, 70, -7, 0, 0, 0, rd.nextInt(25), "escudo", "Imagenes/escudo.png"));
-							break;
+									70, 70, -7, 0, 0, personaje.getNivel() * (rd.nextInt(10) + 1), 0, "escudo",
+									"Imagenes/escudo.png"));
 						}
 
-						case 3: {
+						break;
+					}
+
+					case 3: {
+						if (juegoEnMarcha) {
 							int tamanioEnemigo = rd.nextInt(80) + 20;
 							objetosJuego.add(new ObjetoJuego(panelJuego.getWidth() + 150, panelJuego.getHeight() - 175,
 									tamanioEnemigo, tamanioEnemigo, -7, 0, 0, 0, rd.nextInt(25), "enemigo",
 									"Imagenes/enemigo.png"));
-							break;
-						}
 						}
 
-						try {
-							Thread.sleep(rd.nextInt(4000));
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+						break;
+					}
+					}
+
+					try {
+						Thread.sleep(rd.nextInt(2000));
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
 				}
-
 			}
 		};
-
 		Thread hiloGenerador = new Thread(hilo);
 		hiloGenerador.start();
+
 	}
 
 	public void detenerJuego() {
@@ -290,6 +318,12 @@ public class PantallaJuego implements Pantalla {
 		for (int i = 0; i < parallaxCielo.size(); i++) {
 			parallaxCielo.get(i).setVelX(0);
 		}
+
+		for (int i = 0; i < objetosJuego.size(); i++) {
+			objetosJuego.get(i).setVelX(0);
+		}
+
+		juegoEnMarcha = false;
 	}
 
 	public void reanudarJuego() {
@@ -308,17 +342,28 @@ public class PantallaJuego implements Pantalla {
 		for (int i = 0; i < parallaxCielo.size(); i++) {
 			parallaxCielo.get(i).setVelX(-1);
 		}
+
+		for (int i = 0; i < objetosJuego.size(); i++) {
+			objetosJuego.get(i).setVelX(-7);
+		}
+
+		juegoEnMarcha = true;
 	}
 
 	@Override
 	public void pulsarRaton(MouseEvent e) {
-		if (juegoEnMarcha) {
-			detenerJuego();
-			juegoEnMarcha = false;
-		} else {
-			reanudarJuego();
-			juegoEnMarcha = true;
+
+		for (int i = 0; i < listaBotones.size(); i++) {
+			listaBotones.get(i).comprobarClick(e);
 		}
+
+//		if (juegoEnMarcha) {
+//			detenerJuego();
+//			juegoEnMarcha = false;
+//		} else {
+//			reanudarJuego();
+//			juegoEnMarcha = true;
+//		}
 	}
 
 	@Override
@@ -359,7 +404,24 @@ public class PantallaJuego implements Pantalla {
 
 	}
 
+	public void generarBotones() {
+		listaBotones.add(new Boton(personaje.getPosX() - 25, personaje.getPosY() - 75, 50, 50, 0, 0, Color.RED, 0, this,
+				objetosJuego));
+		listaBotones.add(new Boton(personaje.getPosX() + 35, personaje.getPosY() - 75, 50, 50, 0, 0, Color.GREEN, 1,
+				this, objetosJuego));
+	}
+
+	public void vaciarMensaje() {
+		this.mensaje = null;
+	}
+
+	public void desactivarEvento() {
+		this.eventoActivo = false;
+	}
+
 	private void comprobarColisiones() {
+		Graphics g = panelJuego.getGraphics();
+
 		for (int i = 0; i < objetosJuego.size(); i++) {
 			if (personaje.colisiona(objetosJuego.get(i))) {
 				switch (objetosJuego.get(i).getTipo()) {
@@ -367,17 +429,47 @@ public class PantallaJuego implements Pantalla {
 				case "pocion": {
 					personaje.incrementarVida(objetosJuego.get(i));
 					objetosJuego.remove(i);
+					break;
 				}
 
 				case "espada": {
+					detenerJuego();
 
+					if (!eventoActivo) {
+						eventoActivo = true;
+						mensaje = "¿Coger " + objetosJuego.get(i).getTipo() + " +" + objetosJuego.get(i).getAtaque()
+								+ "?";
+						generarBotones();
+					}
+
+					break;
 				}
 
 				case "escudo": {
+					detenerJuego();
+
+					if (!eventoActivo) {
+						eventoActivo = true;
+						mensaje = "¿Coger " + objetosJuego.get(i).getTipo() + " +" + objetosJuego.get(i).getDefensa()
+								+ "?";
+						generarBotones();
+
+					}
+
+					break;
 
 				}
 
 				case "enemigo": {
+					detenerJuego();
+
+					if (!eventoActivo) {
+						eventoActivo = true;
+						mensaje = "¿Intentar evasión o combate?";
+						generarBotones();
+					}
+
+					break;
 
 				}
 				}
