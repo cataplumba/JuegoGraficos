@@ -3,19 +3,9 @@ package pantallas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Random;
 import java.util.Vector;
-
-import javax.imageio.ImageIO;
 
 import principal.PanelJuego;
 import principal.Sprite;
@@ -31,21 +21,16 @@ public class PantallaJuego implements Pantalla {
 
 //	final static int ANCHO_FONDO = 1200;
 
-	private Vector<Sprite> generadorEventos;
-
 	/** SPRITES **/
 	Character personaje;
 
 	/** VARIABLES PARA TIEMPO **/
-	private double tiempoInicial = System.nanoTime();
-	private double tiempoTranscurrido;
-	private DecimalFormat formato = new DecimalFormat("#");
-	private int aleatorizadorEventos;
+//	private double tiempoInicial = System.nanoTime();
+//	private double tiempoTranscurrido;
+//	private DecimalFormat formato = new DecimalFormat("#");
+//	private int aleatorizadorEventos;
 
 	/** FONDO **/
-
-	BufferedImage canvasPersonaje;
-	Image imagenPersonaje;
 	Vector<Sprite> parallaxSuelo;
 	Vector<Sprite> parallaxBosque;
 	Vector<Sprite> parallaxCielo;
@@ -70,19 +55,10 @@ public class PantallaJuego implements Pantalla {
 		parallaxSuelo = new Vector<Sprite>();
 		parallaxBosque = new Vector<Sprite>();
 		parallaxCielo = new Vector<Sprite>();
-		generadorEventos = new Vector<Sprite>();
 		objetosJuego = new Vector<ObjetoJuego>();
 		listaBotones = new Vector<Boton>();
 		eventoActivo = false;
 
-		// aleatorizadorEventos = rd.nextInt(10) + 1;
-
-		try {
-			// canvasFondo = ImageIO.read(new File("Imagenes/capaSuelo.png"));
-			canvasPersonaje = ImageIO.read(new File("Imagenes/personaje.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
 		personaje = new Character(40, panelJuego.getHeight() - 200, 80, 80, 0, 0, 1, rd.nextInt(15), rd.nextInt(15), 20,
 				"Imagenes/personaje.png");
@@ -260,7 +236,6 @@ public class PantallaJuego implements Pantalla {
 
 	@Override
 	public void ejecutarFrame() {
-		Random rd = new Random();
 		try {
 			Thread.sleep(25);
 		} catch (InterruptedException e) {
@@ -487,7 +462,6 @@ public class PantallaJuego implements Pantalla {
 	}
 
 	private void comprobarColisiones() {
-		Graphics g = panelJuego.getGraphics();
 
 		for (int i = 0; i < objetosJuego.size(); i++) {
 			if (personaje.colisiona(objetosJuego.get(i))) {
@@ -543,4 +517,14 @@ public class PantallaJuego implements Pantalla {
 			}
 		}
 	}
+
+	public String getMensaje() {
+		return mensaje;
+	}
+
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
+	
+	
 }

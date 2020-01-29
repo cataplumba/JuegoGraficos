@@ -30,7 +30,7 @@ public class PantallaInicio implements Pantalla{
 		g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
 		g.setFont(fuenteInicio);
 		g.setColor(colorLetraInicio);
-		g.drawString("BIENVENIDO", panel.getWidth()/2-120,  panel.getHeight()/2-10);
+		g.drawString("HAZ CLICK PARA INICIAR LA AVENTURA", panel.getWidth()/2-350,  panel.getHeight()/2-10);
 		
 	}
 
@@ -39,7 +39,7 @@ public class PantallaInicio implements Pantalla{
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {e.printStackTrace();}
-		colorLetraInicio = colorLetraInicio == Color.WHITE ? Color.ORANGE : Color.WHITE;
+		//colorLetraInicio = colorLetraInicio == Color.WHITE ? Color.ORANGE : Color.WHITE;
 		
 	}
 

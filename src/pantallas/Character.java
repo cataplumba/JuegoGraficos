@@ -23,12 +23,6 @@ public class Character extends ObjetoJuego {
 		inventario = new Vector<ObjetoJuego>();
 	}
 
-	public void combatir(ObjetoJuego enemigo) {
-		while (salud > 0 || enemigo.getSalud() > 0) {
-
-		}
-	}
-
 	public int getExperiencia() {
 		return experiencia;
 	}
@@ -111,9 +105,11 @@ public class Character extends ObjetoJuego {
 
 	/**
 	 * Decrementa la defensa del personaje
+	 * 
 	 * @param ataque
 	 * 
-	 * Si la defensa del personaje es inferior o igual a 1 no se decrementa, y se establece en 1
+	 *               Si la defensa del personaje es inferior o igual a 1 no se
+	 *               decrementa, y se establece en 1
 	 */
 	public void decrementarDefensa(int defensa) {
 		if ((this.defensa - defensa) <= 1) {
@@ -123,12 +119,37 @@ public class Character extends ObjetoJuego {
 		}
 	}
 
+	/**
+	 * El personaje combate contra un objeto
+	 * 
+	 * @param enemigo
+	 */
+	public int combatir(ObjetoJuego enemigo) {
+		while (salud > 0 && enemigo.getSalud() > 0) {
+			System.out.println("Salud Personaje: " + salud);
+			System.out.println("Salud Enemigo: " + enemigo.getSalud());
+			enemigo.setSalud(enemigo.getSalud() - this.ataque);
+			if (enemigo.getSalud() > 0) {
+				this.salud -= enemigo.getAtaque();
+			}
+		}
+		return salud > 0 ? 1 : 0;
+	}
+
 	public void incrementarVida(ObjetoJuego pocion) {
 		if (this.salud < 100) {
 			this.salud += pocion.getSalud();
 		} else {
 			this.salud = 100;
 		}
+	}
+
+	public int getSiguienteNivel() {
+		return siguienteNivel;
+	}
+
+	public void setSiguienteNivel(int siguienteNivel) {
+		this.siguienteNivel = siguienteNivel;
 	}
 
 }

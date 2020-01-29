@@ -21,7 +21,7 @@ public class PantallaFinal implements Pantalla{
 	private BufferedImage canvasFinal;
 	private Image fondoEscalado;
 	
-	public PantallaFinal(PanelJuego panel,String tiempoFinal,String ruta) {
+	public PantallaFinal(String ruta) {
 		this.ruta = ruta;
 		this.panel=panel;
 		this.tiempoFinal=tiempoFinal;
