@@ -171,13 +171,13 @@ public class PantallaJuego implements Pantalla {
 				switch (personaje.getInventario().get(i).getTipo()) {
 				case "espada": {
 					g.setColor(Color.red);
-					g.drawString("+"+Integer.toString(personaje.getInventario().get(i).getAtaque()), 15, 230);
+					g.drawString(Integer.toString(personaje.getInventario().get(i).getAtaque()), 15, 230);
 					break;
 				}
 
 				case "escudo": {
 					g.setColor(Color.green);
-					g.drawString("+"+Integer.toString(personaje.getInventario().get(i).getDefensa()), 15, 230);
+					g.drawString(Integer.toString(personaje.getInventario().get(i).getDefensa()), 15, 230);
 					break;
 				}
 				}
@@ -191,13 +191,13 @@ public class PantallaJuego implements Pantalla {
 				switch (personaje.getInventario().get(i).getTipo()) {
 				case "espada": {
 					g.setColor(Color.red);
-					g.drawString("+"+Integer.toString(personaje.getInventario().get(i).getAtaque()), 50, 230);
+					g.drawString(Integer.toString(personaje.getInventario().get(i).getAtaque()), 50, 230);
 					break;
 				}
 
 				case "escudo": {
 					g.setColor(Color.green);
-					g.drawString("+"+Integer.toString(personaje.getInventario().get(i).getDefensa()), 50, 230);
+					g.drawString(Integer.toString(personaje.getInventario().get(i).getDefensa()), 50, 230);
 					break;
 				}
 				}
@@ -211,13 +211,13 @@ public class PantallaJuego implements Pantalla {
 				switch (personaje.getInventario().get(i).getTipo()) {
 				case "espada": {
 					g.setColor(Color.red);
-					g.drawString("+"+Integer.toString(personaje.getInventario().get(i).getAtaque()), 85, 230);
+					g.drawString(Integer.toString(personaje.getInventario().get(i).getAtaque()), 85, 230);
 					break;
 				}
 
 				case "escudo": {
 					g.setColor(Color.green);
-					g.drawString("+"+Integer.toString(personaje.getInventario().get(i).getDefensa()), 85, 230);
+					g.drawString(Integer.toString(personaje.getInventario().get(i).getDefensa()), 85, 230);
 					break;
 				}
 				}
