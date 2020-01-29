@@ -48,7 +48,7 @@ public class Character extends ObjetoJuego {
 		this.experiencia += experienciaGanada;
 
 		// Si conseguimos la experiencia necesaria, subiremos de nivel
-		if (experiencia == siguienteNivel) {
+		if (experiencia >= siguienteNivel) {
 			nivel++;
 			experiencia = 0;
 			siguienteNivel *= 0.5;
@@ -136,6 +136,10 @@ public class Character extends ObjetoJuego {
 		return salud > 0 ? 1 : 0;
 	}
 
+	/**
+	 * Suma puntos de salud
+	 * @param pocion
+	 */
 	public void incrementarVida(ObjetoJuego pocion) {
 		if (this.salud < 100) {
 			this.salud += pocion.getSalud();

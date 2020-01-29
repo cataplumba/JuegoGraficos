@@ -21,7 +21,7 @@ public class PantallaFinal implements Pantalla{
 	private BufferedImage canvasFinal;
 	private Image fondoEscalado;
 	
-	public PantallaFinal(String ruta) {
+	public PantallaFinal(String ruta,PanelJuego panel) {
 		this.ruta = ruta;
 		this.panel=panel;
 		this.tiempoFinal=tiempoFinal;
@@ -42,22 +42,16 @@ public class PantallaFinal implements Pantalla{
 	@Override
 	public void pintarPantalla(Graphics g) {
 		rellenarFondo(g);
-//		fondoEscalado = canvasFinal.getScaledInstance(panel.getWidth(), panel.getHeight(),
-//				BufferedImage.SCALE_SMOOTH);
+		fondoEscalado = canvasFinal.getScaledInstance(panel.getWidth(), panel.getHeight(),
+				BufferedImage.SCALE_SMOOTH);
 		
 		
 		g.drawImage(canvasFinal.getScaledInstance(panel.getWidth(), panel.getHeight(), BufferedImage.SCALE_SMOOTH), 0, 0, null);
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("fuente1",1,40));
-		//Imagenes/darth-vader-guitar.jpg
-		if(ruta.equalsIgnoreCase("Imagenes/darth-vader-guitar.jpg")) {
-			g.drawString("�Derrota! Pulsa para jugar de nuevo", 20, 40);
-		}else {
-			g.drawString("�Victoria! Pulsa para jugar de nuevo", 20, 40);
-		}
 		
 		g.setColor(Color.GREEN);
-		g.drawString(tiempoFinal, 60, 100);
+		g.drawString("HAZ CLICK PARA JUGAR DE NUEVO", 60, 100);
 		
 		g.dispose();
 	}

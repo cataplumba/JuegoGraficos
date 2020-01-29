@@ -317,7 +317,7 @@ public class PantallaJuego implements Pantalla {
 						if (juegoEnMarcha) {
 							int tamanioEnemigo = rd.nextInt(80) + 20;
 							objetosJuego.add(new ObjetoJuego(panelJuego.getWidth() + 150, panelJuego.getHeight() - 175,
-									tamanioEnemigo, tamanioEnemigo, -7, 0, 0, 0, rd.nextInt(25), "enemigo",
+									tamanioEnemigo, tamanioEnemigo, -7, 0, rd.nextInt(2)*personaje.getNivel(), 0, rd.nextInt(20)*personaje.getNivel(), "enemigo",
 									"Imagenes/enemigo.png"));
 						}
 
@@ -447,10 +447,10 @@ public class PantallaJuego implements Pantalla {
 	}
 
 	public void generarBotones() {
-		listaBotones.add(new Boton(personaje.getPosX() - 25, personaje.getPosY() - 75, 50, 50, 0, 0, Color.RED, 0, this,
+		listaBotones.add(new Boton(personaje.getPosX() - 25, personaje.getPosY() - 75, 50, 50, 0, 0, Color.RED, 0, this,panelJuego,
 				objetosJuego));
 		listaBotones.add(new Boton(personaje.getPosX() + 35, personaje.getPosY() - 75, 50, 50, 0, 0, Color.GREEN, 1,
-				this, objetosJuego));
+				this,panelJuego, objetosJuego));
 	}
 
 	public void vaciarMensaje() {

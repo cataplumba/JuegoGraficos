@@ -5,17 +5,20 @@ import java.awt.event.MouseEvent;
 import java.util.Random;
 import java.util.Vector;
 
+import principal.PanelJuego;
 import principal.Sprite;
 
 public class Boton extends Sprite {
 	private int accion;
 	private PantallaJuego pantallaJuego;
+	private PanelJuego panel;
 
 	public Boton(int posX, int posY, int ancho, int alto, int velX, int velY, Color color, int accion,
-			PantallaJuego pantallaJuego, Vector<ObjetoJuego> listaObjeto) {
+			PantallaJuego pantallaJuego, PanelJuego panel, Vector<ObjetoJuego> listaObjeto) {
 		super(posX, posY, ancho, alto, velX, velY, color);
 		this.accion = accion;
 		this.pantallaJuego = pantallaJuego;
+		this.panel = panel;
 
 	}
 
@@ -52,6 +55,7 @@ public class Boton extends Sprite {
 	 *          esquivarlo
 	 */
 	public void eventoEnemigo(MouseEvent e) {
+		Random rd = new Random();
 		boolean clickX = (e.getX() >= posX) && (e.getX() <= posX + ancho);
 		boolean clickY = (e.getY() >= posY) && (e.getY() <= posY + alto);
 
@@ -61,21 +65,21 @@ public class Boton extends Sprite {
 			// Caso afirmativo. Se procede al combate.
 			case 1: {
 				pantallaJuego.setMensaje("Combatiendo....");
-				try {
-					Thread.sleep(3000);
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}
-				
-				if(pantallaJuego.personaje.combatir(pantallaJuego.objetosJuego.get(0))==0) {
-					//pantallaJuego = new PantallaFinal("Imagenes/youdied.jpg");
-				}
 
-				
-
-				pantallaJuego.setMensaje("Has vencido a enemigo. Te faltan "
-						+ (pantallaJuego.personaje.getSiguienteNivel() - pantallaJuego.personaje.getExperiencia())
-						+ " puntos de experiencia para el siguiente nivel");
+				if (pantallaJuego.personaje.combatir(pantallaJuego.objetosJuego.get(0)) == 0) {
+					panel.setPantalla(new PantallaFinal("Imagenes/youdied.jpg", panel));
+				} else {
+					pantallaJuego.objetosJuego.remove(0);
+					pantallaJuego.desactivarEvento();
+					pantallaJuego.reanudarJuego();
+					pantallaJuego.personaje.ganarExperiencia(rd.nextInt(50) * (pantallaJuego.personaje.getNivel()));
+					pantallaJuego.setMensaje("Has vencido a enemigo. Te faltan "
+							+ (pantallaJuego.personaje.getSiguienteNivel() - pantallaJuego.personaje.getExperiencia())
+							+ " puntos de experiencia para el siguiente nivel");
+				}
+				while (!pantallaJuego.listaBotones.isEmpty()) {
+					pantallaJuego.listaBotones.remove(0);
+				}
 				break;
 			}
 
@@ -83,32 +87,38 @@ public class Boton extends Sprite {
 			// contra él.
 			case 0: {
 				System.out.println("Click");
-				Random rd = new Random();
 				int num = rd.nextInt();
 
 				if (num == 0) {
 					pantallaJuego.setMensaje("Enemigo evadido con éxito");
+					pantallaJuego.reanudarJuego();
+					pantallaJuego.desactivarEvento();
 					pantallaJuego.objetosJuego.remove(0);
 				} else {
-					pantallaJuego.setMensaje("Evasión fallida. Preparando combate...");
 					pantallaJuego.personaje.combatir(pantallaJuego.objetosJuego.get(0));
-
-					try {
-						Thread.sleep(3000);
-					} catch (InterruptedException e1) {
-						e1.printStackTrace();
-					}
-
+					pantallaJuego.reanudarJuego();
+					pantallaJuego.desactivarEvento();
+					pantallaJuego.personaje.ganarExperiencia(rd.nextInt(50) * pantallaJuego.personaje.getNivel());
 					pantallaJuego.setMensaje("Has vencido a enemigo. Te faltan "
 							+ (pantallaJuego.personaje.getSiguienteNivel() - pantallaJuego.personaje.getExperiencia())
 							+ " puntos de experiencia para el siguiente nivel");
 				}
+				while (!pantallaJuego.listaBotones.isEmpty()) {
+					pantallaJuego.listaBotones.remove(0);
+				}
 				break;
 			}
+				
 			}
 		}
 	}
 
+	/**
+	 * El jugador encuentra un objeto y debe decidir si cogerlo o dejarlo en el
+	 * suelo
+	 * 
+	 * @param e
+	 */
 	public void eventoObjeto(MouseEvent e) {
 
 		boolean clickX = (e.getX() >= posX) && (e.getX() <= posX + ancho);
