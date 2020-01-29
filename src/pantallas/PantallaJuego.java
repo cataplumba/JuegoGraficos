@@ -200,14 +200,6 @@ public class PantallaJuego implements Pantalla {
 				break;
 			}
 			}
-//			if ((personaje.getInventario().size()<2)) {
-//				personaje.getInventario().get(i).setPosX(15);
-//				personaje.getInventario().get(i).setPosY(125);
-//			} else {
-//				personaje.getInventario().get(i).setPosY(125);
-//				personaje.getInventario().get(i).setPosX(500);
-//				
-//			}
 			personaje.getInventario().get(i).pintarEnMundo(g);
 		}
 
@@ -215,18 +207,6 @@ public class PantallaJuego implements Pantalla {
 		g.setColor(Color.white);
 		if (mensaje != null) {
 			g.drawString(mensaje, personaje.getPosX() - 20, personaje.getPosY() + 125);
-		}
-
-		if (eventoActivo) {
-			g.drawString("Evento Activo", panelJuego.getWidth() - 200, 20);
-		} else {
-			g.drawString("Evento No Activo", panelJuego.getWidth() - 250, 20);
-		}
-
-		if (juegoEnMarcha) {
-			g.drawString("Juego en Marcha", panelJuego.getWidth() - 250, 50);
-		} else {
-			g.drawString("Juego pausado", panelJuego.getWidth() - 200, 50);
 		}
 
 		// g.drawString(Integer.toString(aleatorizadorEventos), panelJuego.getWidth() -
